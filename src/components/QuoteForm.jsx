@@ -1,13 +1,14 @@
-import { Formik } from "formik";
+import {Formik} from "formik";
 import React from "react";
-import { useState } from "react";
-import { Form, Button, Modal, Alert } from "react-bootstrap";
+import {useState} from "react";
+import {Form, Button, Modal, Alert} from "react-bootstrap";
 import * as yup from "yup";
 import emailjs from "emailjs-com";
 
 
 const schema = yup.object().shape({
-  name: yup.string().required().label("name"),
+  firstname: yup.string().required().label("firstname"),
+  lastname: yup.string().required().label("lastname"),
   email: yup.string().required().email(),
   phone: yup.number().required(),
   zip: yup.number().required(),
@@ -24,18 +25,18 @@ const QuoteForm = props => {
   const handleFormSubmit = values => {
     //send request here and handle it,
     emailjs.send("service_bjnsj9g", "template_gtjh7cu", values, "user_tm2Wf7r3IPorQXM3O4ykW")
-    .then(
-      result => {
-        console.log("success", result.text);
-        setSubmitted(true);
-      },
-      error => {
-        console.log("error", error.text);
-        setSubmitted(true);
-        setError(true);
-      }
-    )
-    .catch((err) => {console.log(err)});
+      .then(
+        result => {
+          console.log("success", result.text);
+          setSubmitted(true);
+        },
+        error => {
+          console.log("error", error.text);
+          setSubmitted(true);
+          setError(true);
+        }
+      )
+      .catch((err) => {console.log(err)});
   };
 
   const handleTryAgain = () => {
@@ -44,14 +45,16 @@ const QuoteForm = props => {
   };
 
   const initialValues = {
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
     phone: "",
     zip: "",
     comment: ""
   };
 
-  if (submitted) {
+  if (submitted)
+  {
     return (
       <Modal show={true} centered size='lg' onHide={handleClose}>
         {error ? (
@@ -59,7 +62,7 @@ const QuoteForm = props => {
             <Modal.Header closeButton>
               <Modal.Title>Something went wrong.</Modal.Title>
             </Modal.Header>
-            <Alert variant='danger' style={{ margin: "5%" }}>
+            <Alert variant='danger' style={{margin: "5%"}}>
               Something went wrong, please try again.
             </Alert>
             <Modal.Footer>
@@ -73,7 +76,7 @@ const QuoteForm = props => {
             <Modal.Header closeButton>
               <Modal.Title>Success!</Modal.Title>
             </Modal.Header>
-            <Alert variant='success' style={{ margin: "5%" }}>
+            <Alert variant='success' style={{margin: "5%"}}>
               You&apos;ve successfully submitted a request for a quote, Stay tuned for a call from us!
             </Alert>
           </>
@@ -94,16 +97,26 @@ const QuoteForm = props => {
           initialValues={initialValues}
           className='quoteForm'
         >
-          {({ handleSubmit, handleChange, values, errors }) => (
+          {({handleSubmit, handleChange, values, errors}) => (
             <Form onSubmit={handleSubmit} noValidate className='quoteForm'>
               <Form.Group className='mb-3' controlId='validationFormik101'>
                 <Form.Control
                   type='text'
-                  name='name'
-                  placeholder='Name*'
+                  name='firstname'
+                  placeholder='First Name*'
                   onChange={handleChange}
                   value={values.name}
-                  isInvalid={!!errors.name}
+                  isInvalid={!!errors.firstname}
+                />
+              </Form.Group>
+              <Form.Group className='mb-3'>
+                <Form.Control
+                  type='text'
+                  name='lastname'
+                  placeholder='Last Name*'
+                  onChange={handleChange}
+                  value={values.lastname}
+                  isInvalid={!!errors.lastname}
                 />
               </Form.Group>
               <Form.Group className='mb-3'>
